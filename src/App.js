@@ -6,7 +6,7 @@ import './App.css';
 import LogIn from './user/logIn';
 import Home from './home';
 import Header from './header';
-import Signin from './user/testSignIn'
+import Signin from './user/SignIn'
 import Disconnection from './user/disconnection';
 import PresentationRecipe from './Recipe/presentationRecipe';
 import AddRecipe from './Recipe/addRecipe';
@@ -24,11 +24,10 @@ function App() {
   return (
   <Routes>
     {/* user */}
-    {/* <Route path="/" element={<EnterPage />} /> */}
+    <Route path="/" element={<Home />} />
     <Route path="/home" element={<Header />} />
     <Route path="/logIn" element={<LogIn />} />
-    {/* <Route path="/signIn" element={<SignIn />} /> */}
-    <Route path='/testSignIn' element={<Signin/>}/>
+    <Route path='/signIn' element={<Signin/>}/>
     <Route path="/disconnection" element={<Disconnection/>}/>
     {/* recipe */}
      <Route path="/addRecipe" element={<AddRecipe />} />

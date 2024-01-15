@@ -28,18 +28,20 @@ export const editShoping = (shopping, userId) => {
                 });
             })
             .catch(err => console.error(err));
-} 
+}
 
-export const addShopping=( userId,name, count)=>{
-    return dispatch =>
+export const addShopping = ({userId,name, count}) => {
+    return dispatch => {
+       console.log("name:", name, "userId:", userId, "count:", count)
         axios.post(`http://localhost:8080/api/bay`, { Name: name, UserId: userId, Count: count })
             .then((x) => {
                 dispatch({ type: 'ADD_SHOPPING', pyload: x.data })
                 Swal.fire({
-                    title: "המוצר נוסף בהצלחה!", 
+                    title: "המוצר נוסף בהצלחה!",
                     icon: "success"
                 });
             })
             .catch(err => console.error(err));
+    }
 }
 
