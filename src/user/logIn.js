@@ -47,7 +47,6 @@ const LogIn = () => {
         resolver: yupResolver(userSchema)
     });
     const onSubmit = (data) => {
-        console.log("submit", data);
         axios.post(`http://localhost:8080/api/user/login`, { Username: data.UserName, Password: data.Password })
             .then(x => {
 
@@ -61,7 +60,6 @@ const LogIn = () => {
     }
 
     return <>
-        {/* {console.log("return:Login")} */}
         <React.Fragment>
             {/* <Button variant="outlined" onClick={handleClickOpen}>
                 Log In

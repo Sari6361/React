@@ -1,10 +1,10 @@
 import axios from "axios";
 import Swal from 'sweetalert2'
 
-export const GetShopping = (userId) => {
+export const getShopping = (userId) => {
     return dispatch =>
         axios.get(`http://localhost:8080/api/bay/${userId}`)
-            .then(x => { dispatch({ type: "GET_SHOPPING", pyload: x.data }) })
+            .then(x => { dispatch({ type: "SET_SHOPPING", pyload: x.data }) })
             .catch(err => console.error(err));
 }
 
@@ -36,7 +36,7 @@ export const addShopping=( userId,name, count)=>{
             .then((x) => {
                 dispatch({ type: 'ADD_SHOPPING', pyload: x.data })
                 Swal.fire({
-                    title: "המוצר נוסף בהצלחה!",
+                    title: "המוצר נוסף בהצלחה!", 
                     icon: "success"
                 });
             })

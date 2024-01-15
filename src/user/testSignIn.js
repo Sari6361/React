@@ -36,14 +36,12 @@ const Signin = () => {
     const onSubmit = (data) => {
         axios.post(`http://localhost:8080/api/user/sighin`, { Username: data.UserName, Password: data.Password, Name: data.Name, Phone: data.Phone, Email: data.Email, Tz: data.Tz })
         .then((x) => {
-            console.log("ONSUBMIT",x.data);
             dispatch({ type: 'SET_USER', pylaod: x.data });
              //SetShopping(x.data.Id);
             navigate("/home");
             })
             .catch((err) => {
                 console.log(err)
-        //        console.log(err.request.response);
             });
     }
     return <>

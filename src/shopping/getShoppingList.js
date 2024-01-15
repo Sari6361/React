@@ -1,3 +1,4 @@
+import React from 'react'
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import * as yup from "yup";
@@ -6,99 +7,120 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { InputRef } from "../user/logIn";
-import {Icon,TableRow, TableHeaderCell, TableHeader, TableCell, TableBody, Table} from "semantic-ui-react";
-
+import { Icon, TableRow, TableHeaderCell, TableHeader, TableCell, TableBody, Table, Form, Message, Segment } from "semantic-ui-react";
+import { addShopping, deletShoping, getShopping } from "../service/shopping"
+import { Button } from "@mui/material";
+import { AspectRatioSharp } from "@mui/icons-material";
+import Header from '../header';
 
 const itemSchema = yup.object({
     Product: yup.string().required("לא הוכנס שם מוצר"),
     Amount: yup.number().positive("כמות חייבת להיות גדולה מאפס ").required(""),
     Type: yup.string().required(""),
 });
-import React from 'react'
-// import { TableRow, TableHeaderCell, TableHeader, TableCell, TableBody, Table, Icon } from 'semantic-ui-react'
-import { Button } from "@mui/material";
-import { AspectRatioSharp } from "@mui/icons-material";
-
 
 const ShoppingList = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [add, setAdd] = useState(false);
 
-    let [user, shopping] = useSelector(s => {
-        user: s.user.user;
-        shopping: s.shopping.shopping_list;
-    })
+    const { user, shopping } = useSelector(s => ({
+        user: s.user.user,
+        shopping: s.shopping.shopping_list,
+    }))
     const { register, handleSubmit, formState: { errors }, control } = useForm({
         resolver: yupResolver(itemSchema)
     });
+    useEffect(() => {
+        if (!shopping.length)
+            dispatch(getShopping(user.Id)).then(console.log("shop: ", shopping))
+    }, [])
 
-    deleteProduct = (product) => {
-        axios.post(`http://localhost:8080/api/bay/${user.Id}/${product.Id}`, { Id: product.Id, UserId: user.Id })
-            .then(
-                dispatch({ type: 'DELETE_SHOPPING', pyload: product })
-            )
-            .catch(err => console.log(err.response.data));
+    const deleteProduct = (productId) => {
+        dispatch(deletShoping(productId))
     }
-    onSubmit = (data) => {
-        axios.post(`http://localhost:8080/api/bay`, { Name: data.Product, Count: data.Count, UserId: user.Id })
-            .then(x => dispatch({ type: 'ADD_SHOPPING', pyload: x.data }))
-            .catch(err => err.data.response);
+    const onSubmit = (data) => {
+        dispatch(addShopping({ userId: user.Id, name: data.Name, count: data.Count }))
     }
     return <>
-
-        <Table >
-            <TableHeader>
-                <TableRow>
-                    <TableHeaderCell>כמות</TableHeaderCell>
-                    <TableHeaderCell> שם</TableHeaderCell>
-                    <TableHeaderCell>סוג</TableHeaderCell>
+        <Header />
+        <Segment>
+            <Table celled  >
+                {/* <TableHeader>
+                <TableCell>
+                    <TableRow></TableRow>
                     <TableHeaderCell></TableHeaderCell>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {shopping.map((m, i) => {
-                    <TableRow key={i}>
-                        <TableCell>{m.Amount}</TableCell>
-                        <TableCell> {m.Product}</TableCell>
-                        <TableCell>{m.Type}</TableCell>
-                        <TableCell ><button onClick={() => deleteProduct(m)}><Icon name="trash alternate" /></button></TableCell>
-                    </TableRow>
-                })}
-            </TableBody>
-            <Button onClick={setAdd(true)}>הוספת מוצר</Button>
-            {add ? <><Message
-                attached
-                header='הוספת מוצר'
-                content='מלא את השדות למלא כדי להוסיף מוצר'
-            />
-                <Form className='attached fluid segment' onSubmit={handleSubmit(onSubmit)}>
-                    <Form.Group widths='equal'>
-                        <Form.Field>
-                        <InputRef
-                                fluid
+                    <TableHeaderCell> </TableHeaderCell>
+                    <TableHeaderCell></TableHeaderCell>
+                    <TableHeaderCell></TableHeaderCell>
+                </TableCell>
+            </TableHeader> */}
+                <TableHeader columns={4} textAlign="center" style={{ width: '50vw' }}>
+                    {/* <TableRow> */}
+                    {console.log("shop(header): ", shopping)}
+                        <TableHeaderCell>כמות</TableHeaderCell>
+                        <TableHeaderCell>שם</TableHeaderCell>
+                        <TableHeaderCell>סוג</TableHeaderCell>
+                        <TableHeaderCell>סוג</TableHeaderCell>
+                    {/* </TableRow> */}
+                </TableHeader>
+                <TableBody>
+                    {shopping.map((m, i) => {
+                        <TableRow key={i}>
+                            {console.log(m)}
+                            <TableCell>11+{m.Count}</TableCell>
+                            <TableCell> 22+{m.Name}</TableCell>
+                            {/* <TableCell>{m.Type}</TableCell> */}
+                            <TableCell ><button onClick={() => deleteProduct(m.Id)}><Icon name="trash alternate" /></button></TableCell>
+                        </TableRow>
+                    })}
+                </TableBody>
+                <Button onClick={() => setAdd(true)}>הוספת מוצר</Button>
+                {add ? <><Message
+                    attached
+                    header='הוספת מוצר'
+                    content='מלא את השדות למלא כדי להוסיף מוצר'
+                />
+                    <Form className='attached fluid segment' onSubmit={handleSubmit(onSubmit)}>
+                        <Form.Group widths='equal'>
+                            <Form.Field fluid
                                 label="שם "
                                 placeholder='Product '
-                                type='number'
+                                type='text'
                                 {...register("Product")}
                                 error={{ content: 'Please enter your product name', pointing: 'below' }}
                             />
-                            <InputRef {...register("Amount")} />
-                        </Form.Field>
-                        <Form.Field>
+                            <Form.Field fluid
+                                label="כמות "
+                                placeholder='Amount '
+                                type='number'
+                                {...register("Amount")}
+                                error={{ content: 'Please enter your Amount ', pointing: 'below' }}
+                            />
+                            <Form.Field fluid
+                                label="סוג "
+                                placeholder='Product '
+                                type='text'
+                                {...register("Type")}
+                                error={{ content: 'Please enter your Type name', pointing: 'below' }}
+                            />
+                            {/* <InputRef {...register("Amount")} /> */}
+
+                            {/* <Form.Field>
                             <InputRef
                                 fluid
-                                label="שם"
-                                placeholder='Product'
-                                type='Product'
-                                {...register("Product")}
+                                label="כמות"
+                                placeholder='Amount'
+                                type='Amount'
+                                {...register("Amount")}
                             />
-                        </Form.Field>
-                    </Form.Group>
-                    <Form.Input label='סוג' placeholder=' Type ' type='text' {...register("Type")} />
-                    <Button type="submit"> שמור</Button>
-                </Form></> : null}
-        </Table>
+                        </Form.Field> */}
+                        </Form.Group>
+                        {/* <Form.Input label='סוג' placeholder=' Type ' type='text' {...register("Type")} /> */}
+                        <Button type="submit"> שמור</Button>
+                    </Form></> : null}
+            </Table>
+        </Segment>
     </>
 
 

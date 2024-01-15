@@ -13,12 +13,10 @@ const Header = () => {
     //     // setOpen(true);
     //     <Link to={"/logIn"} />
     // };
-    { console.log("header:first") }
     const [activeItem, setActiveItem] = useState();
     const user = useSelector((state) => ({ user: state.user.user }));
     return <>
         {console.log("user:", user)}
-        {console.log("header:menu")}
         <Segment inverted>
             <Menu inverted secondary>
 
@@ -46,7 +44,7 @@ const Header = () => {
                         name='/getShoppingList'
                         active={activeItem === '/getShoppingList'}
                     >
-                        <Link to={'/getShoppingList'}> רשימת קניות</Link>
+                        <Link to={'/shopingList'}> רשימת קניות</Link>
                     </MenuItem>
                     <MenuItem
                         name='/addRecipe'
@@ -63,14 +61,9 @@ const Header = () => {
                     <MenuItem
                         position='left'
                         name='התנתקות'
-                        //active={activeItem === '/disconnection'}
                         onClick={({ name }) => {
-                            //setActiveItem(name);
                             dispatch({ type: 'SET_USER', pylaod: null })
-                            console.log("disconnection:"+user);
-                        }
-                            // navigate('/');
-                        }
+                        } }
                     >
                         <Link to={'/home'}>התנתקות</Link>
                     </MenuItem></> 

@@ -12,6 +12,7 @@ import PresentationRecipe from './Recipe/presentationRecipe';
 import AddRecipe from './Recipe/addRecipe';
 import AllRecipes from './Recipe/allRecipes';
 import RecipeCard from './Recipe/RecipeCard';
+import ShoppingList from './shopping/getShoppingList';
 
 function App() {
   // <Header/>
@@ -38,6 +39,8 @@ function App() {
     {/* category */}
     {/* <Route path="/addCategory" element={<TestCategory />} />
     <Route path="/getCategories" element={<InsetList />} /> */}
+    {/* shoping list */}
+    <Route path="/shopingList" element={<ShoppingList/>}/>
   </Routes>
   );
 }
