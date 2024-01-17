@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button, Card, CardContent, CardDescription, CardHeader, Icon, Image } from "semantic-ui-react";
 
 
-const RecipeCard = ({ recipe }) => {
+const RecipeCard = ({ ...recipe }) => {
     console.log("come to card:",recipe)
     const dispatch=useDispatch();
     const navigate=useNavigate();
@@ -18,7 +18,7 @@ const RecipeCard = ({ recipe }) => {
         navigate('/displayRecipe');
     }
 
-    return <>
+    return 
         <Card>
             <Image wrapped src={recipe.Img} size="medium" className="recipe-img" />
             <CardContent>
@@ -41,7 +41,5 @@ const RecipeCard = ({ recipe }) => {
                 <Button onClick={handleClick}>הצג</Button>
             </CardContent>
         </Card>
-    </>
-
 }
 export default RecipeCard;

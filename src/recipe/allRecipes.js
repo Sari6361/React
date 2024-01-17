@@ -61,24 +61,22 @@ const AllRecipes = () => {
             <Select placeholder='רמת קושי' icon='signal' iconposition='left' onChange={(e, { value }) => setDifficulty(value)} options={
                 difficultyList.map((c, i) => { return { key: i, text: c, value: c } })} />
             <Button onClick={() => setMyRecipies(true)}>המתכונים שלי</Button>
-            <Button onClick={() => setReset(true)}>איפוס כל החיפושים</Button>
+            <Button onClick={() => resetAllFilters()}>איפוס כל החיפושים</Button>
         </Segment>
         <Segment inverted>
             {recipies.map((r, i) => {
-                <div>
-                {/* // ((category == null || parseInt(category) === r.CategoryId) &&
-                //     (duration == null || parseInt(duration) === r.Duration) &&
-                //     (difficulty == null || parseInt(difficulty) === r.Difficulty) &&
-                //     (myRecipies == false || user.Id === r.UserId)) ?
-                //     < RecipeCard key={i} recipe={r} /> : <>
-                //         {console.log("recipe:", r)};</>
-                // (!category || parseInt(category) === r.CategoryId) &&
-                // (!myRecipies || user.Id === r.UserId) &&
-                // (!duration || parseInt(duration) >= parseInt(r.Duration)) &&
-                // (!difficulty || r.Difficulty === difficulty) ? */}
-                <RecipeCard key={i} recipe={r} />
-                {/* //  : <></> */}
-</div>
+                ((category == null || parseInt(category) === r.CategoryId) &&
+                    (duration == null || parseInt(duration) === r.Duration) &&
+                    (difficulty == null || parseInt(difficulty) === r.Difficulty) &&
+                    (myRecipies == false || user.Id === r.UserId)) ?
+                    < RecipeCard key={i} recipe={r} /> : <>
+                    {console.log("recipe:", r)};</>
+                    //  (!category || parseInt(category) === r.CategoryId) &&
+                    // (!myRecipies || user.Id === r.UserId) &&
+                    // (!duration || parseInt(duration) >= parseInt(r.Duration)) &&
+                    // (!difficulty || r.Difficulty === difficulty) ?
+                    // <RecipeCard key={i} recipe={r} />
+                    // : <></>
             })}
         </Segment>
     </>

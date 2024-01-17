@@ -47,9 +47,9 @@ const ShoppingList = () => {
     return <>
         <Header />
         <Segment className='container  '>
-            <Table size='large' padded >
-                < TableHeader className='filters'>
-                    <TableHeaderCell>כמות</TableHeaderCell>
+            <Table size='large' widths='equal' >
+                < TableHeader >
+                    <TableHeaderCell>    כמות</TableHeaderCell>
                     <TableHeaderCell>    שם</TableHeaderCell>
                     <TableHeaderCell>    סוג</TableHeaderCell>
                     <TableHeaderCell>        </TableHeaderCell>
@@ -59,7 +59,7 @@ const ShoppingList = () => {
                         <TableRow key={i}>
                             {console.log(m)}
                             <TableCell>{m.Count}</TableCell>
-                            <TableCell>{m.Name}</TableCell>
+                            <TableCell value={m.Name}>{m.Name}</TableCell>
                             {/* <TableCell>{m.Type}</TableCell> */}
                             <TableCell ><button onClick={() => deleteProduct(m.Id)}><Icon name="trash alternate" /></button></TableCell>
                         </TableRow>
@@ -89,7 +89,7 @@ const ShoppingList = () => {
                                 placeholder='Count '
                                 type='number'
                                 {...register("Count")}
-                            // error={{ content: 'Please enter your Amount ', pointing: 'below' }}
+                            error={{ content: 'Please enter your Amount ', pointing: 'below' }}
                             />
                         </Form.Field>
                         <Form.Field>

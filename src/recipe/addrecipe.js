@@ -3,18 +3,20 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { InputRef } from "../user/SignIn";
-import { Form } from "semantic-ui-react";
+import { Form, TextArea, Icon, Select, Message, Segment, FormGroup, Button } from "semantic-ui-react";
+import Header from "../header";
+import { getCategories } from "../service/category";
 
 const schema = yup.object({
-    Id: yup.number().integer().required().min(1, "חובה לבחור קטגוריה"),
     UserId: yup.number().positive().integer().required(),
     Name: yup.string().required("חובה להכניס שם"),
     Img: yup.string().url().required("חובה להכניס כתובת URL של תמונה"),
     Duration: yup.number("משך זמן צריך להיותר מספר").positive("משך זמן לא יכול להיות מספר שלילי").required("חובה להכניס משך זמן"),
     Difficulty: yup.number().integer().positive().required().min(1, "חובה לבחור רמת קושי"),
+    CategoryId: yup.number().integer().required().min(1, "חובה לבחור קטגוריה"),
     Description: yup.string().required("חובה להכניס תיאור"),
     Instructions: yup.array().of(yup.string().required()),
     Ingrident: yup.array().of(
@@ -26,19 +28,19 @@ const schema = yup.object({
     )
 })
 
-
 const AddRecipe = () => {
-    const { user, difficultyLevel, recipies } = useSelector((state) => ({
+    const { user, difficultyLevel, recipies, categories } = useSelector((state) => ({
         user: state.user.user,
-        difficultyLevels: state.recipe.difficultyLevel,
-        recipes: state.recipe.recipies
+        difficultyLevel: state.recipe.difficultyLevel,
+        recipes: state.recipe.recipies,
+        categories: state.category.categories,
     }));
 
     const {
         register, handleSubmit, formState: { errors }, control
     } = useForm({ resolver: yupResolver(schema) });
 
-    const { fields, append, prepend, remove, swap, move, insert } = useFieldArray({
+    const { fields, append: appendIngridient, prepend, remove, swap, move, insert } = useFieldArray({
         control,
         name: "Ingridents"
     })
@@ -55,29 +57,94 @@ const AddRecipe = () => {
                 navigate('/recipes');
             }).catch(e => console.log(e.response));
     }
+    useEffect(() => {
+        if (!categories.length)
+            dispatch(getCategories());
+    }, [])
 
     return <>
-        <div inverted className="container">
-            <Form className='attached fluid segment' color='blue' onSubmit={handleSubmit(onSubmit)}>
+        <Header />
+        <Segment  >
+            <Form className='segment' color='blue' onSubmit={handleSubmit(onSubmit)}>
                 <Form.Field >
                     <label>שם </label>
-                    <InputRef fluid label="שם " placeholder='Name' type='text'   {...register("Name")} error={{ content: 'Please enter recipe name', pointing: 'below' }}/>
+                    <InputRef fluid label="שם " placeholder='Name' type='text'
+                        {...register("Name")} />
                 </Form.Field>
 
                 <Form.Field >
                     <label>קישור לתמונה </label>
-                    <InputRef  fluid label="קישור לתמונה "  placeholder='Img src' type='src' {...register("Img")} error={{ content: 'Please enter recipe Img src', pointing: 'below' }}/>
+                    <InputRef fluid label="קישור לתמונה " placeholder='Img src' type='text' {...register("Img")}  />
                 </Form.Field>
+                {/* לבדוק האם התיאו רנקלט טוב */}
+                <Form.Field direction="ltr" control={TextArea} fluid label="תיאור קצר  " {...register("Description")} placeholder='Tell us more about the recipe...' type='text'>
 
-                <Form.TextArea>
-                    <label>תיאור קצר  </label>
-                    <InputRef fluid label="תיאור קצר  " placeholder='Tell us more about the recipe...' type='text' {...register("Description")}
-                        // error={{ content: 'Please enter recipe Img src', pointing: 'below' }}
-                        />
-                </Form.TextArea>
-                
+                </Form.Field>
+                <Form.Field>
+                    <label>קטגוריה</label>
+                    <select {...register("CategoryId")} name="CategoryId" placeholder='Choose Category' defaultValue={0}>
+                        <option value={0} disabled> בחר קטגוריה</option>
+                        {categories?.map((category) =>
+                            <option key={category.Id} value={category.Id}>{category.Name}</option>)}
+                    </select>
+                    {errors.CategoryId?.message ? <Message warning content={errors.CategoryId.message} /> : <></>}
+                </Form.Field>
+                <p>Add Category</p>
+                <Form.Field>
+                    <label>רמת קושי</label>
+                    <select {...register("Difficulty")} name="Difficulty" placeholder='Choose Difficulty Level' defaultValue={0}>
+                        <option value={0} disabled> בחר רמת קושי</option>
+                        {difficultyLevel?.map((level, i) =>
+                            <option key={i} value={level}>{level}</option>)}
+                    </select>
+                    {errors.Difficulty?.message ? <Message warning content={errors.Difficulty.message} /> : <></>}
+                </Form.Field>
+                <h3>רכיבים</h3>
+                {fields?.map((f, i) => {
+                    <FormGroup key={i}>
+                        {console.log(f)}
+                        <Form.Field>
+                            <label>כמות</label>
+                            <InputRef {...register(`Ingrident.${i}.Count`)} defaultValue={f?.Count} placeholder="כמות" />
+                            <p>{errors[`Ingrident.${i}.Count`]?.message}</p>
+                        </Form.Field>
+                        <Form.Field>
+                            <label>סוג</label>
+                            <InputRef {...register(`Ingrident.${i}.Type`)} defaultValue={f?.Type} placeholder="סוג " />
+                            <p>{errors[`Ingrident.${i}.Type`]?.message}</p>
+                        </Form.Field>
+                        <Form.Field>
+                            <label>מוצר</label>
+                            <InputRef {...register(`Ingrident.${i}.Name`)} defaultValue={f?.Name} placeholder="שם מוצר" />
+                            <p >{errors[`Ingrident.${i}.Name`]?.message}</p>
+                        </Form.Field>
+                        <Button icon size='large' floated="left" onClick={() => remove(i)}>
+                            <Icon name="trash alternate" />
+                        </Button>
+                    </FormGroup>
+                })}
+                <Button onClick={() => appendIngridient({ Name: "", Count: 0, Type: "" })}>הוסף מוצר</Button>
+                <h3>הוראות הכנה</h3>
+                {instructionsFields?.map((instruct, i) => {
+                    <FormGroup key={i}>
+                        {console.log(instruct)}
+                        <Form.Field>
+                            <label>כמות</label>
+                            <InputRef {...register(`Instructions.${i}`)} defaultValue={instruct?.i} placeholder="הוראת הכנה" />
+                            <p>{errors[`Instructions.${i}`]?.message}</p>
+                            <Button icon size='large' floated="left" onClick={() => removeInstruction(i)}>
+                                <Icon name="trash alternate" size="large" />
+                            </Button>
+                        </Form.Field>
+                    </FormGroup>
+                })}
+                <Button onClick={() => appendInstruction(" ")}>הוסף הוראת הכנה</Button>
+                <Button type="submit" size="medium" floated="left">
+                    <Icon name="save outline" style={{ margin: 10 }} />שמור
+                </Button>
+                <p />
             </Form >
-        </div>
+        </Segment>
     </>
 }
 
