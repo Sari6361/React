@@ -27,11 +27,11 @@ const PresentationRecipe = () => {
                 <CardContent extra>
                     <span style={{ margin: 30 }}>
                         <Icon color='blue' name='list'/>
-                        {" " + categoryRecipe.find(c => parseInt(c.Id) ===parseInt( selectedRecipe.CategoryId)).Name + " "}
+                        {/* {" " + categoryRecipe.find(c => parseInt(c.Id) ===parseInt( selectedRecipe.CategoryId)).Name + " "} */}
                     </span>
                     <span style={{ margin: 30 }}>
                         <Icon color='blue' name='signal' />
-                        {" " + difficultyList?.find(d => parseInt(d.Id) ===parseInt( selectedRecipe.Difficulty)).Name + " "}
+                        {/* {" " + difficultyList?.find(d => parseInt(d.Id) ===parseInt( selectedRecipe.Difficulty)).Name + " "} */}
                     </span>
                     <span style={{ margin: 30 }}>
                         <Icon color='blue' name='clock' />
@@ -80,7 +80,7 @@ const PresentationRecipe = () => {
                         }}>
                             <Icon name='trash alternate' />
                         </Button>
-                        <Button color='blue' icon size='large' floated="left" onClick={() => navigate('/edit')}>
+                        <Button color='blue' icon size='large' floated="left" onClick={() => navigate('/editRecipe')}>
                             <Icon name='edit' />
                         </Button>
                     </CardContent>

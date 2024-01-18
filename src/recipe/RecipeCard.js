@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Button, Card, CardContent, CardDescription, CardHeader, Icon, Image } from "semantic-ui-react";
 
-
 const RecipeCard = ({recipe}) => {
 
     const dispatch = useDispatch();
@@ -22,10 +21,10 @@ const RecipeCard = ({recipe}) => {
 
     return <>
         <Card >
-            <Image wrapped src={recipe.Img} size="medium" className="recipe-img" />
+            <Image wrapped src={recipe?.Img} size="medium" className="recipe-img" />
             <CardContent>
-                <CardHeader>{recipe.Name}</CardHeader>
-                <CardDescription>{recipe.Description}</CardDescription>
+                <CardHeader>{recipe?.Name}</CardHeader>
+                <CardDescription>{recipe?.Description}</CardDescription>
             </CardContent>
             <CardContent extra className='filters col'>
                 <div>
@@ -38,7 +37,7 @@ const RecipeCard = ({recipe}) => {
                 </div>
                 <div>
                     <Icon name='clock' />
-                    {"  " + recipe.Duration + "  דקות "}
+                    {"  " + recipe?.Duration + "  דקות "}
                 </div>
                 <Button onClick={handleClick}>הצג</Button>
             </CardContent>

@@ -8,8 +8,8 @@ import Home from './home';
 import Header from './header';
 import Signin from './user/signIn'
 import Disconnection from './user/disconnection';
-import PresentationRecipe from './recipe/presentationRecipe';
-import AddRecipe from './recipe/addrecipe';
+import PresentationRecipe from './recipe/addrecipe';
+import AddRecipe from './recipe/addrecipe'
 import AllRecipes from './recipe/allRecipes';
 import RecipeCard from './recipe/recipeCard';
 import ShoppingList from './shopping/getShoppingList';
@@ -34,10 +34,10 @@ function App() {
     {/* recipe */}
      <Route path="/addRecipe" element={<AddRecipe />} />
     <Route path="/showselectedrecipe" element={<RecipeCard />} />
-    {/* <Route path="/editRecipe" element={<EditRecipe />} /> */}
-    <Route path="/getRecipes" element={<AllRecipes />} />
+    <Route path="/editRecipe" element={<AddRecipe />} />
+    <Route path="/getRecipes" element={<AllRecipes my='false'/>} />
     <Route path="/displayRecipe" element={<PresentationRecipe />} /> 
-    <Route path='/myRecipes' element={<MyRecipes/>}/>
+    <Route path='/myRecipes' element={<AllRecipes my='true'/>}/>
     {/* category */}
      <Route path="/addCategory" element={<AddCategory />}/>
     {/* <Route path="/getCategories" element={<InsetList />} />  */}

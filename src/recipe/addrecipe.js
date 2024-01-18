@@ -65,6 +65,7 @@ const AddRecipe = () => {
     }, [selected_recipe])
 
     return <>
+        {user === null ? navigate('/home') : null}
         <Header />
         <Segment  >
             <Form className='segment' color='blue' onSubmit={handleSubmit(onSubmit)}>
