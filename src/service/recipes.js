@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useSelector } from "react-redux";
 import Swal from 'sweetalert2'
 
 
@@ -21,7 +22,7 @@ export const deleteRecipe = (RecipeId) => {
 
 export const addRecipe = (recipe) => {
     return dispatch =>
-        axios.post(`http://localhost:8080/api/recipe/edit`, recipe)
+        axios.post(`http://localhost:8080/api/recipe`, recipe)
             .then(x => {
                 dispatch({ type: 'ADD_RECIPE', pyload: x.data });
                 Swal.fire({

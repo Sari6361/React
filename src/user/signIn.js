@@ -15,6 +15,9 @@ export const InputRef = React.forwardRef(({ ...rest }, ref) => (
         ref={ref}
     />
 ));
+export const TextAreaRef = React.forwardRef(({...rest},ref)=>(
+    <textarea {...rest} ref={ref}/>
+))
 //סופי!!!
 const Signin = () => {
     const dispatch = useDispatch();

@@ -2,8 +2,7 @@
 import React, { Component, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom';
-import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText } from '@mui/material';
-import { MenuItem, Menu, Segment } from 'semantic-ui-react'
+import { MenuItem, Menu, Segment, Button } from 'semantic-ui-react'
 const Header = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -32,7 +31,7 @@ const Header = () => {
                         name='/getRecipes'
                         active={activeItem === '/getRecipes'}
                     >
-                        <Link to={`/getRecipes/${user.Id}}`}>המתכונים שלי</Link>
+                        <Link  onClick={()=>navigate('myRecipes')}/*to={``}*/>המתכונים שלי </Link>
                     </MenuItem>
                     <MenuItem
                         name='/getRecipes'
@@ -81,11 +80,6 @@ const Header = () => {
                             name='/logIn'
                             active={activeItem === '/logIn'}
                         >
-                            {/* <Button variant="outlined" onClick={handleClickOpen}> */}
-                            {/* <Button variant="outlined"> */}
-                            {/* <Link to={"/logIn"} /> */}
-                            {/* כניסה */}
-                            {/* </Button> */}
                             <Link to={'/logIn'}>כניסה</Link>
                         </MenuItem></>}
 

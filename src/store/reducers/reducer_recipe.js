@@ -3,7 +3,9 @@ import * as actions from '../action';
 const initialState = {
     recipies: [],
     selectRecipe: null,
-    difficultyLevel: ["הכל","קל מאד","קל","בינוני","קשה","קשה מאד"],
+    difficultyLevel:[]
+    // [{ Id: 1, Name: 'קל' }, { Id: 2, Name: 'בינוני' }, { Id: 3, Name: 'קשה' }] 
+    //  [{id: 1, name: "הכל"  }, { id: 2, name: "קל מאד" }, { id: 3, name: "קל" }, { id: 4, name: "בינוני" }, { id: 5, name: "קשה" }, { id: 6, name: "קשה מאד" }],
 }
 
 const Reducer_recipe = (state = initialState, action) => {
@@ -43,14 +45,14 @@ const Reducer_recipe = (state = initialState, action) => {
                     recipies: action.pyload
                 })
             }
-            case actions.SET_SELECTED_RECIPE:
-                {
-                    return ({
-                        ...state,
-                        selectRecipe: action.pyload
-                    })
-                }
-        default: return ({ ...state });
+        case actions.SET_SELECTED_RECIPE:
+            {
+                return ({
+                    ...state,
+                    selectRecipe: action.pyload
+                })
+            }
+        default: return ({ ...state,difficultyLevel:[{ Id: 1, Name: 'קל' }, { Id: 2, Name: 'בינוני' }, { Id: 3, Name: 'קשה' }]  });
     }
 
 }

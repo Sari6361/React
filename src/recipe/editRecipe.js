@@ -1,21 +1,18 @@
-import { useForm, useFieldArray } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { InputRef, TextAreaRef } from "../user/signIn";
+import { InputRef } from "../user/SignIn";
 import { Form, TextArea, Icon, Message, Segment, FormGroup, Button } from "semantic-ui-react";
 import Header from "../header";
 import { getCategories } from "../service/category";
-import { addRecipe } from '../service/recipes'
+import { addRecipe } from '../service/recipes';
+
 const schema = yup.object({
-    //UserId: yup.number().positive().integer().required(),
+    UserId: yup.number().positive().integer().required(),
     Name: yup.string().required("חובה להכניס שם"),
     Img: yup.string().url().required("חובה להכניס כתובת URL של תמונה"),
     Duration: yup.number("משך זמן צריך להיותר מספר").positive("משך זמן לא יכול להיות מספר שלילי").required("חובה להכניס משך זמן"),
-    Difficulty: yup.number().integer().required().min(1, "חובה לבחור רמת קושי"),
+    Difficulty: yup.number().integer().positive().required().min(1, "חובה לבחור רמת קושי"),
     CategoryId: yup.number().integer().required().min(1, "חובה לבחור קטגוריה"),
     Description: yup.string().required("חובה להכניס תיאור"),
     Instructions: yup.array().of(yup.string().required()),
@@ -28,13 +25,13 @@ const schema = yup.object({
     )
 })
 
-const AddRecipe = () => {
-    const { user, difficultyLevel, recipies, categories, selected_recipe } = useSelector((state) => ({
+const EditRecipe = () => {
+    const { user, difficultyLevel, recipies, categories,selected_recipe } = useSelector((state) => ({
         user: state.user.user,
         difficultyLevel: state.recipe.difficultyLevel,
         recipes: state.recipe.recipies,
         categories: state.category.categories,
-        selected_recipe: state.recipe.selectRecipe,
+        selected_recipe:state.recipe.selectRecipe,
     }));
 
     const {
@@ -52,22 +49,20 @@ const AddRecipe = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const onSubmit = (data) => {
-        console.log("onsubmit-add", { ...data, UserId: user.Id });
-
-        dispatch(addRecipe({ ...data, UserId: user.Id }))
-        navigate('/getRecipes');
+        console.log("onsubmit-add");
+        dispatch(addRecipe(data))
     }
     useEffect(() => {
         if (!categories.length)
             dispatch(getCategories());
-        selected_recipe?.Ingrident?.map((ing) => appendIngridient(ing))
-        selected_recipe?.Instructions?.map((ins) => appendInstruction(ins))
+            selected_recipe?.Ingrident?.map((ing) => appendIngridient(ing))
+            selected_recipe?.Instructions?.map((ins) => appendInstruction(ins))
     }, [selected_recipe])
 
     return <>
         <Header />
         <Segment  >
-            <Form className='segment' color='blue' onSubmit={handleSubmit(onSubmit)}>
+            <Form  className='segment' color='blue' onSubmit={handleSubmit(onSubmit)}>
                 <Form.Field >
                     <label>שם </label>
                     <InputRef fluid label="שם " placeholder='Name' type='text' defaultValue={selected_recipe?.Name}
@@ -77,17 +72,15 @@ const AddRecipe = () => {
 
                 <Form.Field >
                     <label>קישור לתמונה </label>
-                    <InputRef fluid label="קישור לתמונה " placeholder='Img src' type='text' defaultValue={selected_recipe?.Img} {...register("Img")} />
-                </Form.Field>
-                <Form.Field >
-                    <label>משך זמן </label>
-                    <InputRef fluid label="קישור לתמונה " placeholder='Img src' type='number' defaultValue={selected_recipe?.Duration} {...register("Duration")} />
+                    <InputRef fluid label="קישור לתמונה " placeholder='Img src' defaultValue={selected_recipe?.Img} type='text' {...register("Img")} />
                 </Form.Field>
                 <label>תיאור קצר </label>
-                <TextAreaRef direction="ltr" fluid placeholder='Tell us more about the recipe...' defaultValue={selected_recipe?.Description} {...register("Description")} type='text' />
-                <Form.Field>
+                <TextArea  >
+                    <InputRef direction="ltr" defaultValue={selected_recipe?.Description} fluid placeholder='Tell us more about the recipe...' {...register("Description")}  type='text' />
+                </TextArea>
+                <Form.Field> 
                     <label>קטגוריה</label>
-                    <select {...register("CategoryId")} name="CategoryId" placeholder='Choose Category' defaultValue={selected_recipe ? selected_recipe?.CategoryId : 0}>
+                    <select {...register("CategoryId")} name="CategoryId" placeholder='Choose Category' defaultValue={selected_recipe?.CategoryId}>
                         <option value={0} disabled> בחר קטגוריה</option>
                         {categories?.map((category) =>
                             <option key={category.Id} value={category.Id}>{category.Name}</option>)}
@@ -97,21 +90,20 @@ const AddRecipe = () => {
                 <Button floated="left" onClick={() => { navigate('/addCategory') }}>הוסף קטגוריה</Button>
                 <Form.Field>
                     <label>רמת קושי</label>
-                    <select {...register("Difficulty")} name="Difficulty" placeholder='Choose Difficulty Level' defaultValue={selected_recipe ? selected_recipe?.Difficulty : 0}>
+                    <select {...register("Difficulty")} name="Difficulty" placeholder='Choose Difficulty Level' defaultValue={selected_recipe?.Difficulty}>
                         <option value={0} disabled> בחר רמת קושי</option>
-                        {console.log("difflevel", difficultyLevel)}
                         {difficultyLevel?.map((level, i) =>
-                            <option key={i} value={level.Id}>{level.Name}</option>)}
+                            <option key={i} value={level}>{level}</option>)}
                     </select>
                     {errors.Difficulty?.message ? <Message warning content={errors.Difficulty.message} /> : <></>}
                 </Form.Field>
                 <h3>רכיבים</h3>
-                {fields?.map((f, i) => (<>
+                {fields?.map((f, i) => {
                     <FormGroup key={i}>
                         {console.log(f)}
                         <Form.Field>
                             <label>כמות</label>
-                            <InputRef {...register(`Ingrident.${i}.Count`)} defaultValue={f?.Count} placeholder="כמות" />
+                            <InputRef  {...register(`Ingrident.${i}.Count`)} defaultValue={f?.Count} placeholder="כמות" />
                             <p>{errors[`Ingrident.${i}.Count`]?.message}</p>
                         </Form.Field>
                         <Form.Field>
@@ -128,10 +120,10 @@ const AddRecipe = () => {
                             <Icon name="trash alternate" />
                         </Button>
                     </FormGroup>
-                </>))}
+                })}
                 <Button onClick={() => appendIngridient({ Name: "", Count: 0, Type: "" })}>הוסף מוצר</Button>
                 <h3>הוראות הכנה</h3>
-                {instructionsFields?.map((instruct, i) => (<>
+                {instructionsFields?.map((instruct, i) => {
                     <FormGroup key={i}>
                         {console.log(instruct)}
                         <Form.Field>
@@ -143,15 +135,15 @@ const AddRecipe = () => {
                             </Button>
                         </Form.Field>
                     </FormGroup>
-                </>))}
+                })}
                 <Button onClick={() => appendInstruction(" ")}>הוסף הוראת הכנה</Button>
-                <Button type="submit" size="medium" floated="left" onClick={() => console.log("errors", errors)}>
+                <Button type="submit" size="medium" floated="left">
                     <Icon name="save outline" style={{ margin: 10 }} />שמור
                 </Button>
-                <p />
+                <p/>
             </Form >
         </Segment >
     </>
 }
 
-export default AddRecipe;
+export default EditRecipe;

@@ -30,8 +30,7 @@ export const InputRef = React.forwardRef(({ ...rest }, ref) => (
 
 const LogIn = () => {
     const [open, setOpen] = React.useState(true);
-    const [name, setName] = React.useState();
-    const [password, setPassword] = React.useState(true);
+
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -51,19 +50,14 @@ const LogIn = () => {
             .then(x => {
 
                 dispatch({ type: 'SET_USER', pylaod: x.data })
-                // SetShopping(x.data.Id);
                 navigate("/home");
             }).catch(err => {
                 console.log(err.request);
             });
-        // dispatch(logInside(data));
     }
 
     return <>
         <React.Fragment>
-            {/* <Button variant="outlined" onClick={handleClickOpen}>
-                Log In
-            </Button> */}
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Subscribe</DialogTitle>
                 <DialogContent>

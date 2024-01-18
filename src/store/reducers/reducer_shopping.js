@@ -9,9 +9,12 @@ const Reducer_shopping = (state = initialState, action) => {
     switch (action.type) {
         case actions.SET_SHOPPING:
             {
+                const shopping = state.shopping_list
+                let index = shopping.findIndex(s => s.Id == action.pyload.Id)
+                shopping[index] = action.pyload;
                 return ({
                     ...state,
-                    shopping_list: action.pyload
+                    shopping_list: shopping
                 })
             }
         case actions.GET_SHOPPING:
@@ -32,6 +35,7 @@ const Reducer_shopping = (state = initialState, action) => {
             {
                 let list = [...state.shopping_list];
                 list = list.filter(l => l.Name !== action.pyload.Name);
+                { console.log("reducer:", list) }
                 return ({
                     ...state,
                     shopping_list: list

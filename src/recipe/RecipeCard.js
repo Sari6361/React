@@ -1,25 +1,27 @@
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Button, Card, CardContent, CardDescription, CardHeader, Icon, Image } from "semantic-ui-react";
 
 
-const RecipeCard = ({ ...recipe }) => {
-    console.log("come to card:",recipe)
-    const dispatch=useDispatch();
-    const navigate=useNavigate();
+const RecipeCard = ({recipe}) => {
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { categoryList, difficultyList, user } = useSelector((s) => ({
         categoryList: s.category.categories,
         difficultyList: s.recipe.difficultyLevel,
         user: s.user.user
     }));
 
-    const handleClick=()=>{
-        dispatch({type:'SET_SELECTED_RECIPE', pyload:recipe});
+    const handleClick = () => {
+        dispatch({ type: 'SET_SELECTED_RECIPE', pyload: recipe });
         navigate('/displayRecipe');
     }
+    useEffect(() => { console.log("recipe card") },[])
 
-    return 
-        <Card>
+    return <>
+        <Card >
             <Image wrapped src={recipe.Img} size="medium" className="recipe-img" />
             <CardContent>
                 <CardHeader>{recipe.Name}</CardHeader>
@@ -27,19 +29,20 @@ const RecipeCard = ({ ...recipe }) => {
             </CardContent>
             <CardContent extra className='filters col'>
                 <div>
-                    <Icon name='unordered list'/>
-                    {" "+categoryList?.find(c=>c.Id===recipe.CategoryId)?.Name+" "}
+                    <Icon name='unordered list' />
+                    {" " + categoryList?.find(c => c.Id === recipe.CategoryId)?.Name + " "}
                 </div>
                 <div>
-                    <Icon name='level up'/>
-                    {" "+difficultyList?.find(d=>d.Id===recipe.Difficulty)?.Name+" "}
+                    <Icon name='level up' />
+                    {" " + difficultyList?.find(d => d.Id === recipe.Difficulty)?.Name + " "}
                 </div>
                 <div>
-                    <Icon name='clock'/>
-                    {" "+recipe.Duartion+"דקות "}
+                    <Icon name='clock' />
+                    {"  " + recipe.Duration + "  דקות "}
                 </div>
                 <Button onClick={handleClick}>הצג</Button>
             </CardContent>
         </Card>
+    </>
 }
 export default RecipeCard;

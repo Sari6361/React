@@ -6,13 +6,15 @@ import './App.css';
 import LogIn from './user/logIn';
 import Home from './home';
 import Header from './header';
-import Signin from './user/SignIn'
+import Signin from './user/signIn'
 import Disconnection from './user/disconnection';
-import PresentationRecipe from './Recipe/presentationRecipe';
-import AddRecipe from './Recipe/addRecipe';
-import AllRecipes from './Recipe/allRecipes';
-import RecipeCard from './Recipe/RecipeCard';
+import PresentationRecipe from './recipe/presentationRecipe';
+import AddRecipe from './recipe/addrecipe';
+import AllRecipes from './recipe/allRecipes';
+import RecipeCard from './recipe/recipeCard';
 import ShoppingList from './shopping/getShoppingList';
+import AddCategory from './category/addCategory';
+import MyRecipes from './recipe/myRecipe';
 
 function App() {
   // <Header/>
@@ -25,7 +27,7 @@ function App() {
   <Routes>
     {/* user */}
     <Route path="/" element={<Home />} />
-    <Route path="/home" element={<Header />} />
+    <Route path="/home" element={<Home />} />
     <Route path="/logIn" element={<LogIn />} />
     <Route path='/signIn' element={<Signin/>}/>
     <Route path="/disconnection" element={<Disconnection/>}/>
@@ -35,9 +37,10 @@ function App() {
     {/* <Route path="/editRecipe" element={<EditRecipe />} /> */}
     <Route path="/getRecipes" element={<AllRecipes />} />
     <Route path="/displayRecipe" element={<PresentationRecipe />} /> 
+    <Route path='/myRecipes' element={<MyRecipes/>}/>
     {/* category */}
-    {/* <Route path="/addCategory" element={<TestCategory />} />
-    <Route path="/getCategories" element={<InsetList />} /> */}
+     <Route path="/addCategory" element={<AddCategory />}/>
+    {/* <Route path="/getCategories" element={<InsetList />} />  */}
     {/* shoping list */}
     <Route path="/shopingList" element={<ShoppingList/>}/>
   </Routes>

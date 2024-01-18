@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { InputRef } from "../user/logIn";
 import { Icon, TableRow, TableHeaderCell, TableHeader, TableCell, TableBody, Table, Form, Message, Segment } from "semantic-ui-react";
-import { addShopping, deletShoping, getShopping } from "../service/shopping"
+import { addShopping, deletShoping, getShopping, editShoping } from "../service/shopping"
 import { Button } from "@mui/material";
 import { AspectRatioSharp } from "@mui/icons-material";
 import Header from '../header';
@@ -37,8 +37,18 @@ const ShoppingList = () => {
     }, [])
 
     const deleteProduct = (productId) => {
+         console.log("delete:", productId) 
         dispatch(deletShoping(productId))
     }
+    const increaseProduct = (product) => {
+        dispatch(editShoping({ name: product.Name, count: product.Count + 1, userId: user.Id }))
+    }
+    const decreaseProduct = (product) => {
+        if (product.Count > 1)
+            dispatch(editShoping({ name: product.Name, count: product.Count - 1, userId: user.Id })).then(navigate('/shopingList'))
+        else dispatch(deletShoping(product.Id))
+    }
+
     const onSubmit = (data) => {
         console.log("onsubmit data", data)
         dispatch(addShopping({ userId: user.Id, name: data.Name, count: data.Count }))
@@ -47,23 +57,30 @@ const ShoppingList = () => {
     return <>
         <Header />
         <Segment className='container  '>
-            <Table size='large' widths='equal' >
+            <Table basic='very' textAlign="right" size='large' widths='equal' >
                 < TableHeader >
                     <TableHeaderCell>    כמות</TableHeaderCell>
                     <TableHeaderCell>    שם</TableHeaderCell>
-                    <TableHeaderCell>    סוג</TableHeaderCell>
+                    <TableHeaderCell>    +  </TableHeaderCell>
+                    <TableHeaderCell>    -  </TableHeaderCell>
                     <TableHeaderCell>        </TableHeaderCell>
                 </TableHeader>
                 <TableBody>
-                    {shopping.map((m, i) => {
-                        <TableRow key={i}>
-                            {console.log(m)}
-                            <TableCell>{m.Count}</TableCell>
-                            <TableCell value={m.Name}>{m.Name}</TableCell>
-                            {/* <TableCell>{m.Type}</TableCell> */}
-                            <TableCell ><button onClick={() => deleteProduct(m.Id)}><Icon name="trash alternate" /></button></TableCell>
-                        </TableRow>
-                    })}
+                    {console.log("shoppppp", shopping)}
+                    {
+                        shopping?.map((m, i) => (<>
+                            <TableRow key={i}>
+                                {console.log(m)}
+                                <TableCell>{m.Count}</TableCell>
+                                <TableCell value={m.Name}>{m.Name}</TableCell>
+                                {/* <TableCell>{m.Type}</TableCell> */}
+                                <TableCell ><button onClick={() => increaseProduct(m)}><Icon name="cart plus" /></button></TableCell>
+                                <TableCell ><button onClick={() => decreaseProduct(m.Id)}><Icon name="minus" /></button></TableCell>
+                                <TableCell ><button onClick={() => deleteProduct(m.Id)}><Icon name="trash alternate" /></button></TableCell>
+                            </TableRow>
+                        </>))
+                    }
+
                 </TableBody>
             </Table>
             <Button onClick={() => setAdd(true)}>הוספת מוצר</Button>
@@ -89,7 +106,7 @@ const ShoppingList = () => {
                                 placeholder='Count '
                                 type='number'
                                 {...register("Count")}
-                            error={{ content: 'Please enter your Amount ', pointing: 'below' }}
+                                error={{ content: 'Please enter your Amount ', pointing: 'below' }}
                             />
                         </Form.Field>
                         <Form.Field>
