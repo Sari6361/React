@@ -6,14 +6,14 @@ import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../header";
-import { Form, Segment, Input, Button, Icon, Select, From, ListItem, ListHeader, ListContent, Image, List, CardGroup, } from "semantic-ui-react";
+import { Segment,Input, Button, Select, CardGroup } from "semantic-ui-react";
 import { colors } from "@mui/material";
 import { getCategories } from "../service/category";
 import { getRecipes } from "../service/recipes"
 import RecipeCard from "./recipeCard";
 import { InputRef } from "../user/logIn";
 
-const AllRecipes = (my) => {
+const AllRecipes = ({ my }) => {
 
     const dispatch = useDispatch();
 
@@ -29,12 +29,16 @@ const AllRecipes = (my) => {
     const [difficulty, setDifficulty] = useState(null);
     const [myRecipies, setMyRecipies] = useState(false);
 
-    const durationRef = useRef(null);
 
     useEffect(() => {
         if (my) {
             setMyRecipies(true);
-            console.log("my!!!")
+            console.log("my!!!", my)
+        }
+        else {
+            console.log("not MY", my);
+            setMyRecipies(false);
+
         }
         dispatch({ type: 'SET_SELECTED_RECIPE', pyload: null })
         if (recipies.length === 0) {
@@ -45,7 +49,7 @@ const AllRecipes = (my) => {
             dispatch(getCategories());
         console.log("difficulty", difficulty)
 
-    }, [category, difficulty])
+    }, [my, category, difficulty])
 
 
 
@@ -53,39 +57,35 @@ const AllRecipes = (my) => {
         console.log("restart");
         setCategory(null);
         setDuration(null);
-        durationRef.current.value = null;
         setDifficulty(null);
         setMyRecipies(false);
     }
 
     return (<>
         <Header />
-        {!my ?
+        {!my ? <>
             <Segment inverted className='filters col'>
                 <Select placeholder='קטגוריה' icon='list' iconposition='right' onChange={(e, { value }) => { setCategory(value); }}
                     options={categoryList.map((c, i) => { return { key: c.Id, text: c.Name, value: c.Id } })} />
-                <InputRef icon={{ name: 'clock' }}
+                <Input
+                    icon={{ name: 'clock' }}
                     placeholder='משך זמן מקסימלי'
                     type="number"
-                    onChange={(e, { value }) => setDuration(value)}
-                    ref={durationRef} />
-                {/* <Input icon={{ name: 'clock' }} placeholder='משך זמן מקסימלי' type="number" defaultValue={duration} onChange={(e, { value }) => setDuration(value)} /> */}
+                    onChange={(e, { value }) => setDuration(value)} />
                 <Select placeholder='רמת קושי' icon='signal' iconposition='left' onChange={(e, { value }) => setDifficulty(value)} options={
                     difficultyList.map((c, i) => { return { key: i, text: c.Name, value: c.Id } })} />
                 <Button onClick={() => setMyRecipies(true)}>המתכונים שלי</Button>
                 <Button onClick={() => resetAllFilters()}>איפוס כל החיפושים</Button>
-            </Segment> : <></>}
+            </Segment> </> : <><Segment><h1>המתכונים שלי</h1></Segment></>}
         <div className="container">
-            {/* <CardGroup inverted> */}
-            {recipies?.map((r, i) =>
-                ((category == null || (category) === r.CategoryId) &&
-                    (duration == null || parseInt(duration) === parseInt(r.Duration)) &&
-                    (difficulty == null || (difficulty) === r.Difficulty) &&
-                    (myRecipies == false || user.Id === r.UserId)) ?
-                    <><RecipeCard recipe={r} /> {console.log("diff", r.Difficulty)}</> : null
-            )
-            }
-            {/* </CardGroup> */}
+            <CardGroup inverted>
+                {recipies?.map((r, i) =>
+                    ((category == null || (category) === r.CategoryId) &&
+                        (duration == null || parseInt(duration) === parseInt(r.Duration)) &&
+                        (difficulty == null || (difficulty) === r.Difficulty) &&
+                        (myRecipies == false || (myRecipies && user.Id === r.UserId))) ?
+                        <RecipeCard recipe={r} /> : null)}
+            </CardGroup>
         </div>
     </>)
 

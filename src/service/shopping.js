@@ -45,7 +45,7 @@ export const addShopping = ({ userId, name, count }) => {
                     title: "המוצר נוסף בהצלחה!",
                     icon: "success"
                 });
-            })
+            }) 
             .catch(err => console.error(err));
     }
 }

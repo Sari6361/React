@@ -8,13 +8,12 @@ import Home from './home';
 import Header from './header';
 import Signin from './user/signIn'
 import Disconnection from './user/disconnection';
-import PresentationRecipe from './recipe/addrecipe';
-import AddRecipe from './recipe/addrecipe'
+import PresentationRecipe from './recipe/presentationRecipe';
+import AddRecipe from './recipe/formRecipe'
 import AllRecipes from './recipe/allRecipes';
 import RecipeCard from './recipe/recipeCard';
 import ShoppingList from './shopping/getShoppingList';
 import AddCategory from './category/addCategory';
-import MyRecipes from './recipe/myRecipe';
 
 function App() {
   // <Header/>
@@ -32,12 +31,12 @@ function App() {
     <Route path='/signIn' element={<Signin/>}/>
     <Route path="/disconnection" element={<Disconnection/>}/>
     {/* recipe */}
-     <Route path="/addRecipe" element={<AddRecipe />} />
+     <Route path="/addRecipe" element={<AddRecipe type='add'/>} />
     <Route path="/showselectedrecipe" element={<RecipeCard />} />
-    <Route path="/editRecipe" element={<AddRecipe />} />
-    <Route path="/getRecipes" element={<AllRecipes my='false'/>} />
+    <Route path="/editRecipe" element={<AddRecipe type='edit'/>} />
+    <Route path="/getRecipes" element={<AllRecipes my={false}/>} />
     <Route path="/displayRecipe" element={<PresentationRecipe />} /> 
-    <Route path='/myRecipes' element={<AllRecipes my='true'/>}/>
+    <Route path='/myRecipes' element={<AllRecipes my={true}/>}/>
     {/* category */}
      <Route path="/addCategory" element={<AddCategory />}/>
     {/* <Route path="/getCategories" element={<InsetList />} />  */}

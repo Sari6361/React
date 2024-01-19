@@ -12,21 +12,21 @@ const Reducer_recipe = (state = initialState, action) => {
     switch (action.type) {
         case actions.ADD_RECIPE:
             {
-                let recipies = [...state.recipies];
-                recipies.push(action.pylaod);
+                let recipiesl = [...state.recipies];
+                recipiesl.push(action.pylaod);
                 return ({
                     ...state,
-                    recipies
+                    recipies:recipiesl
                 })
             }
         case actions.EDIT_RECIPE:
             {
-                let recipies = [...state.recipies];
-                const index = recipies.findIndex(r => r.Id = action.pylaod.Id);
-                recipies[index] = action.pylaod;
+                let recipiesl = [...state.recipies];
+                const index = recipiesl.findIndex(r => r.Id = action.pylaod.Id);
+                recipiesl[index] = action.pylaod;
                 return ({
                     ...state,
-                    recipies
+                    recipies:recipiesl
                 })
             }
         case actions.DELETE_RECIPE:

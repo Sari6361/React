@@ -22,18 +22,21 @@ export const deleteRecipe = (RecipeId) => {
 
 export const addRecipe = (recipe) => {
     return dispatch =>
+    {
+console.log("addrecipeDispatch",recipe)
         axios.post(`http://localhost:8080/api/recipe`, recipe)
-            .then(x => {
-                dispatch({ type: 'ADD_RECIPE', pyload: x.data });
-                Swal.fire({
-                    position: "top-end",
-                    icon: "success",
-                    title: "המתכון נוסף בהצלחה",
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-            })
-            .catch(err => console.error(err));
+        .then(x => {
+            dispatch({ type: 'ADD_RECIPE', pyload: x.data });
+            Swal.fire({
+                position: "top-end",
+                icon: "success",
+                title: "המתכון נוסף בהצלחה",
+                showConfirmButton: false,
+                timer: 1500
+            });
+        })
+        .catch(err => console.error(err));
+    }
 }
 
 export const editRecipe = (recipe, userId) => {

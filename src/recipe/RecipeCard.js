@@ -17,7 +17,7 @@ const RecipeCard = ({recipe}) => {
         dispatch({ type: 'SET_SELECTED_RECIPE', pyload: recipe });
         navigate('/displayRecipe');
     }
-    useEffect(() => { console.log("recipe card") },[])
+    // useEffect(() => { console.log("recipe card") },[])
 
     return <>
         <Card >

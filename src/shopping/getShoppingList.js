@@ -5,12 +5,9 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { InputRef } from "../user/logIn";
-import { Icon, TableRow, TableHeaderCell, TableHeader, TableCell, TableBody, Table, Form, Message, Segment } from "semantic-ui-react";
+import { Icon, TableRow, TableHeaderCell, TableHeader, Button, TableCell, TableBody, Table, Form, Message, Segment } from "semantic-ui-react";
 import { addShopping, deletShoping, getShopping, editShoping } from "../service/shopping"
-import { Button } from "@mui/material";
-import { AspectRatioSharp } from "@mui/icons-material";
 import Header from '../header';
 
 const itemSchema = yup.object({
@@ -37,7 +34,7 @@ const ShoppingList = () => {
     }, [])
 
     const deleteProduct = (productId) => {
-         console.log("delete:", productId) 
+        console.log("delete:", productId)
         dispatch(deletShoping(productId))
     }
     const increaseProduct = (product) => {
@@ -61,76 +58,67 @@ const ShoppingList = () => {
                 < TableHeader >
                     <TableHeaderCell>    כמות</TableHeaderCell>
                     <TableHeaderCell>    שם</TableHeaderCell>
-                    <TableHeaderCell>    +  </TableHeaderCell>
-                    <TableHeaderCell>    -  </TableHeaderCell>
-                    <TableHeaderCell>        </TableHeaderCell>
+                    <TableHeaderCell>                     </TableHeaderCell>
+                    {/* <TableHeaderCell>     </TableHeaderCell> */}
+                    {/* <TableHeaderCell>        </TableHeaderCell> */}
                 </TableHeader>
                 <TableBody>
                     {console.log("shoppppp", shopping)}
                     {
                         shopping?.map((m, i) => (<>
                             <TableRow key={i}>
-                                {console.log(m)}
-                                <TableCell>{m.Count}</TableCell>
+                                <TableCell>{m.Count + " "}</TableCell>
                                 <TableCell value={m.Name}>{m.Name}</TableCell>
-                                {/* <TableCell>{m.Type}</TableCell> */}
-                                <TableCell ><button onClick={() => increaseProduct(m)}><Icon name="cart plus" /></button></TableCell>
-                                <TableCell ><button onClick={() => decreaseProduct(m.Id)}><Icon name="minus" /></button></TableCell>
-                                <TableCell ><button onClick={() => deleteProduct(m.Id)}><Icon name="trash alternate" /></button></TableCell>
+                                <TableCell >
+                                    <Button floated='left' onClick={() => {
+                                        deleteProduct(m.Id)
+                                        // Swal.fire({
+                                        //     title: "אתה בטוח?",
+                                        //     icon: "warning",
+                                        //     showCancelButton: true,
+                                        //     confirmButtonColor: "#3085d6",
+                                        //     cancelButtonColor: "#d33",
+                                        //     confirmButtonText: "כן, תמחק!",
+                                        //     cancelButtonText: 'לא'
+                                        // }).then((result) => {
+                                        //     if (result.isConfirmed); 
+                                        // })
+
+                                    }}><Icon name="trash alternate" />
+                                    </Button>
+                                    <Button floated='left' onClick={() => increaseProduct(m)}>+</Button>
+                                    <Button floated='left' onClick={() => decreaseProduct(m.Id)}>-</Button>
+                                </TableCell>
                             </TableRow>
                         </>))
                     }
-
                 </TableBody>
             </Table>
             <Button onClick={() => setAdd(true)}>הוספת מוצר</Button>
+            <Button onClick={() => window.print()} icon='print' labelPosition="right" >הדפס רשימת קניות</Button>
             {add ? <><Message
                 attached
                 header='הוספת מוצר'
-            // content='מלא את השדות למלא כדי להוסיף מוצר'
             />
                 <Form className='attached fluid segment' onSubmit={handleSubmit(onSubmit)}>
                     <Form.Group widths='equal'>
                         <Form.Field>
                             <label>שם</label>
-                            {/* error={{ content: 'Please enter your product name', pointing: 'below' }} */}
-                            <InputRef fluid
-                                placeholder='Name '
-                                type='text'
-                                {...register("Name")}
-                            />
+                            <InputRef fluid placeholder='Name ' type='text'  {...register("Name")} />
                         </Form.Field>
+
                         <Form.Field>
                             <label>כמות</label>
-                            <InputRef fluid
-                                placeholder='Count '
-                                type='number'
-                                {...register("Count")}
-                                error={{ content: 'Please enter your Amount ', pointing: 'below' }}
-                            />
+                            <InputRef fluid placeholder='Count ' type='number' {...register("Count")}
+                                error={{ content: 'Please enter your Amount ', pointing: 'below' }} />
                         </Form.Field>
+
                         <Form.Field>
                             <label>סוג</label>
-                            <InputRef fluid
-                                placeholder='Product '
-                                type='text'
-                                {...register("Type")}
-                            // error={{ content: 'Please enter your Type name', pointing: 'below' }}
-                            />
+                            <InputRef fluid placeholder='Product ' type='text'  {...register("Type")} />
                         </Form.Field>
-                        {/* <InputRef {...register("Amount")} /> */}
 
-                        {/* <Form.Field>
-                            <InputRef
-                                fluid
-                                label="כמות"
-                                placeholder='Amount'
-                                type='Amount'
-                                {...register("Amount")}
-                            />
-                        </Form.Field> */}
                     </Form.Group>
-                    {/* <Form.Input label='סוג' placeholder=' Type ' type='text' {...register("Type")} /> */}
                     <Button type="submit"> שמור</Button>
                 </Form></> : null}
         </Segment>
