@@ -22,8 +22,8 @@ const Reducer_recipe = (state = initialState, action) => {
         case actions.EDIT_RECIPE:
             {
                 let recipiesl = [...state.recipies];
-                const index = recipiesl.findIndex(r => r.Id = action.pylaod.Id);
-                recipiesl[index] = action.pylaod;
+                const index = recipiesl.findIndex(r => r.Id === action.pyload.Id);
+                recipiesl[index] = action.pyload;
                 return ({
                     ...state,
                     recipies:recipiesl
@@ -31,11 +31,11 @@ const Reducer_recipe = (state = initialState, action) => {
             }
         case actions.DELETE_RECIPE:
             {
-                let recipies = [...state.recipies];
-                recipies = recipies.filter(r => r.Id !== action.pyload.Id);
+                let recipiesl = [...state.recipies];
+                recipiesl = recipiesl.filter(r => r.Id != action.pyload);
                 return ({
                     ...state,
-                    recipies
+                    recipies:recipiesl
                 })
             }
         case actions.SET_RECIPE:

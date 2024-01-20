@@ -16,12 +16,6 @@ import ShoppingList from './shopping/getShoppingList';
 import AddCategory from './category/addCategory';
 
 function App() {
-  // <Header/>
-  // <Home/>
-  {/* <hr/> */ }
-  {/* <LogIn /> */ }
-  {/* <SignIn /> */ }
-  
   return (
   <Routes>
     {/* user */}
@@ -38,8 +32,7 @@ function App() {
     <Route path="/displayRecipe" element={<PresentationRecipe />} /> 
     <Route path='/myRecipes' element={<AllRecipes my={true}/>}/>
     {/* category */}
-     <Route path="/addCategory" element={<AddCategory />}/>
-    {/* <Route path="/getCategories" element={<InsetList />} />  */}
+     <Route path="/addCategory" element={<AddCategory from={null} />}/>
     {/* shoping list */}
     <Route path="/shopingList" element={<ShoppingList/>}/>
   </Routes>

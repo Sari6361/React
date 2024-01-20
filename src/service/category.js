@@ -30,5 +30,10 @@ export const addCategory = (category) => {
                     icon: "success",
                     title: "הקטגוריה נוספה בהצלחה!"
                 });})
-            .catch(err => console.error(err));
+            .catch(err => {
+                Toast.fire({
+                    icon: "warning",
+                    title: "קטגוריה קיימת "
+                });
+            });
 }

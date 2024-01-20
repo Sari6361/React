@@ -3,17 +3,11 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { useForm } from "react-hook-form";
 import { useDispatch } from 'react-redux';
 import { useNavigate } from "react-router";
-import { DeepRequired } from "react-hook-form";
 import axios from "axios";
-import React, { useState } from 'react';
+import React from 'react';
 import Swal from 'sweetalert2';
-// import { Swal } from '';
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText } from '@mui/material';
-import { Link } from "react-router-dom"
-import { logInside } from '../service/user'
-import { getValue } from "@testing-library/user-event/dist/utils";
-import { SetShopping } from "../store/reducers/reducer_shopping";
-import { Form } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 
 const userSchema = yup.object({
     UserName: yup.string().required("To connect you must enter you name"),
@@ -30,10 +24,6 @@ export const InputRef = React.forwardRef(({ ...rest }, ref) => (
 
 const LogIn = () => {
     const [open, setOpen] = React.useState(true);
-
-    const handleClickOpen = () => {
-        setOpen(true);
-    };
 
     const handleClose = () => {
         //setOpen(false);
@@ -58,14 +48,14 @@ const LogIn = () => {
 
     return <>
         <React.Fragment>
-            <Dialog open={open} onClose={handleClose}>
+            <Dialog open={open} onClose={handleClose} fullWidth='xs'>
                 <DialogTitle>Subscribe</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         אם לא נרשמת עדיין {<Link to={'/signIn'}>לחץ כאן</Link>}
                     </DialogContentText>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                       
+                    <form onSubmit={handleSubmit(onSubmit)} >
+
                         <TextField
                             autoFocus
                             margin="dense"
@@ -75,6 +65,7 @@ const LogIn = () => {
                             fullWidth
                             variant="standard"
                             {...register("UserName")} />
+                        <p className="error">{errors.UserName?.message}</p>
 
                         <TextField
                             autoFocus
@@ -85,10 +76,10 @@ const LogIn = () => {
                             {...register("Password")}
                             fullWidth
                             variant="standard" />
+                        <p className="error">{errors.Password?.message}</p>
 
                         <DialogActions>
                             <Button onClick={handleClose}>בטל</Button>
-                            {/* check why it not work!!! */}
                             <Button type="submit">הכנס</Button>
                         </DialogActions>
                     </form>

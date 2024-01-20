@@ -1,17 +1,17 @@
 
-import axios from 'axios';
 import * as actions from '../action';
-import { useDispatch, useSelector } from 'react-redux';
+
 const initialState = {
     shopping_list: [],
 }
+
 const Reducer_shopping = (state = initialState, action) => {
     switch (action.type) {
         case actions.SET_SHOPPING:
             {
                 const shopping = state.shopping_list
-                let index = shopping.findIndex(s => s.Id == action.pyload.Id)
-                shopping[index] = action.pyload;
+                let index = shopping.findIndex(s => s.Id === action.pyload.Id)
+                shopping[index].Count = action.pyload.Count;
                 return ({
                     ...state,
                     shopping_list: shopping
@@ -19,7 +19,10 @@ const Reducer_shopping = (state = initialState, action) => {
             }
         case actions.GET_SHOPPING:
             {
-                return ({ ...state });
+                return ({
+                    ...state,
+                    shopping_list: action.pyload
+                });
             }
         case actions.ADD_SHOPPING:
             {
@@ -29,13 +32,11 @@ const Reducer_shopping = (state = initialState, action) => {
                     ...state,
                     shopping_list: list
                 })
-
             }
         case actions.DELETE_SHOPPING:
             {
                 let list = [...state.shopping_list];
-                list = list.filter(l => l.Name !== action.pyload.Name);
-                { console.log("reducer:", list) }
+                list = list.filter(l => l.Id != action.pyload);
                 return ({
                     ...state,
                     shopping_list: list

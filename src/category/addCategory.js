@@ -1,50 +1,58 @@
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText } from '@mui/material';
 import * as yup from "yup";
-import { yupResolver } from '@hookform/resolvers/yup'; 
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import {addCategory} from '../service/category'
+import { addCategory } from '../service/category'
 import { useNavigate } from 'react-router-dom';
-import React from "react"
+import React, { useEffect } from "react"
 import { Maximize } from '@mui/icons-material';
-const categorySchema=yup.object({
-    Name:yup.string().required("לא הוכנס שם קטגוריה"),
+const categorySchema = yup.object({
+    Name: yup.string().required("לא הוכנס שם קטגוריה"),
 })
-const AddCategory=()=>{
-    const dispatch=useDispatch();
-    const navigate=useNavigate();
-    const [open, setOpen] = React.useState(true);
+const AddCategory = (from) => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
     };
 
     const handleClose = () => {
-       // setOpen(false);
-        navigate("/addRecipe");
+        if (!from.from)
+            navigate('/home')
+        setOpen(false);
     };
-    const {register, handleSubmit, formState:{errors},control}=useForm({
-        resolver:yupResolver(categorySchema)
+    const { register, handleSubmit, formState: { errors }, control } = useForm({
+        resolver: yupResolver(categorySchema)
     });
 
-    const onSubmit=(data)=>{
-       dispatch(addCategory(data.Name)).then(navigate('/addRecipe'))
+    const onSubmit = (data) => {
+        dispatch(addCategory(data.Name))
+        setOpen(false)
+        if (!from.from)
+            navigate('/home')
     }
-return<>
-        <React.Fragment size={Maximize}>
-            {/* <Button variant="outlined" onClick={handleClickOpen}>
-                Log In
-            </Button> */}
-            <Dialog  open={open} onClose={handleClose}>
+    useEffect(() => {
+        if (!from.from)
+            setOpen(true);
+    }, [from,])
+    return <>
+        <React.Fragment>
+            {from.from === 'edit' ? <Button floated='center' variant="outlined" onClick={handleClickOpen}>
+                הוסף קטגוריה
+            </Button> : <></>}
+            <Dialog open={open} onClose={handleClose} fullWidth='xs'>
                 <DialogTitle >הוספת קטגוריה</DialogTitle>
                 <DialogContent >
                     <DialogContentText>
-                        להוספת קטגוריה חדשה מלא כאן את השם
+                        מלא כאן את שם הקטגוריה
                     </DialogContentText>
                     <form onSubmit={handleSubmit(onSubmit)}>
-                       
+
                         <TextField
-                        size='large'
+                            size='large'
                             autoFocus
                             margin="dense"
                             id="name"
@@ -53,7 +61,7 @@ return<>
                             fullWidth
                             variant="standard"
                             {...register("Name")} />
-
+                        <p className="error">{errors.Name?.message}</p>
                         <DialogActions>
                             <Button onClick={handleClose}>בטל</Button>
                             <Button type="submit">שמור</Button>

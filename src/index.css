@@ -53,3 +53,19 @@ code {
   font-family: system-ui;
   font-size: large;
 }
+.error {
+  color: rgb(216, 8, 8);
+  font-style: italic;
+  font-family: sans-serif;
+  font-size: smaller;
+}
+.home{
+  background-color: black;
+  height: 80vh;
+  padding-top: 90px;
+}
+.homee{
+  color: wheat;
+  font-size: 126px;
+  text-align: center;
+}

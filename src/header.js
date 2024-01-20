@@ -4,16 +4,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom';
 import { MenuItem, Menu, Segment } from 'semantic-ui-react'
 const Header = () => {
-    
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const [activeItem, setActiveItem] = useState();
-    const user = useSelector((state) => ({ user: state.user.user }));
+    const user = useSelector(state => ({ user: state.user.user }));
     return <>
-        {console.log("user:", user)}
         <Segment inverted>
-            <Menu inverted secondary>
+            <Menu inverted pointing secondary>
 
                 {user.user != null ?
                     <><MenuItem
@@ -44,6 +43,7 @@ const Header = () => {
                         <MenuItem
                             name='/addRecipe'
                             active={activeItem === '/addRecipe'}
+                            onClick={() => dispatch({ type: 'SET_SELECTED_RECIPE', pyload: null })}
                         >
                             <Link to={'/addRecipe'}> הוספת מתכון</Link>
                         </MenuItem>
@@ -82,7 +82,7 @@ const Header = () => {
                 {/* יש דף בית| המתכונים שלי | מתכונים | רשימת קניות | הוספת מתכון | הוספת קטגוריה | החלף משתמש */}
 
             </Menu>
-        </Segment>
+        </Segment >
     </>
 }
 export default Header;

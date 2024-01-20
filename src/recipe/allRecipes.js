@@ -6,7 +6,7 @@ import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../header";
-import { Segment,Input, Button, Select, CardGroup } from "semantic-ui-react";
+import { Segment, Input, Button, Select, CardGroup } from "semantic-ui-react";
 import { colors } from "@mui/material";
 import { getCategories } from "../service/category";
 import { getRecipes } from "../service/recipes"
@@ -16,7 +16,7 @@ import { InputRef } from "../user/logIn";
 const AllRecipes = ({ my }) => {
 
     const dispatch = useDispatch();
-
+    const navigate = useNavigate();
     const { recipies, categoryList, difficultyList, user } = useSelector((s) => ({
         recipies: s.recipe.recipies,
         categoryList: s.category.categories,
@@ -62,6 +62,7 @@ const AllRecipes = ({ my }) => {
     }
 
     return (<>
+        {user === null ? navigate('/home') : null}
         <Header />
         {!my ? <>
             <Segment inverted className='filters col'>
@@ -79,12 +80,12 @@ const AllRecipes = ({ my }) => {
             </Segment> </> : <><Segment><h1>המתכונים שלי</h1></Segment></>}
         <div className="container">
             <CardGroup inverted>
-                {recipies?.map((r, i) =>
-                    ((category == null || (category) === r.CategoryId) &&
-                        (duration == null || parseInt(duration) === parseInt(r.Duration)) &&
-                        (difficulty == null || (difficulty) === r.Difficulty) &&
-                        (myRecipies == false || (myRecipies && user.Id === r.UserId))) ?
-                        <RecipeCard recipe={r} /> : null)}
+            {recipies?.map((r, i) =>
+                ((category == null || (category) === r.CategoryId) &&
+                    (duration == null || parseInt(duration) >= parseInt(r.Duration)) &&
+                    (difficulty == null || (difficulty) === r.Difficulty) &&
+                    (myRecipies == false || (myRecipies && user.Id === r.UserId))) ?
+                    <RecipeCard recipe={r} /> : null)}
             </CardGroup>
         </div>
     </>)

@@ -1,7 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Icon, Card, CardContent, CardDescription, CardHeader, List, ListItem, ListContent, Button, ButtonContent, Image, Segment, SegmentGroup, SegmentInline } from "semantic-ui-react";
-import { addShopping } from "../service/shopping";
+import { Icon, Card, CardContent, CardHeader, Button, ButtonContent, Image, Segment, SegmentGroup, SegmentInline } from "semantic-ui-react";
+import { addShopping, editShoping } from "../service/shopping";
+import { deleteRecipe } from "../service/recipes";
+import Swal from "sweetalert2";
 import Header from "../header";
 
 const PresentationRecipe = () => {
@@ -9,12 +11,20 @@ const PresentationRecipe = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const { categoryRecipe, difficultyList, selectedRecipe, user } = useSelector((s) => ({
+    const { categoryRecipe, difficultyList, selectedRecipe, shopping, user } = useSelector((s) => ({
         categoryRecipe: s.category.categories,
         difficultyList: s.recipe.difficultyLevel,
         selectedRecipe: s.recipe.selectRecipe,
+        shopping: s.shopping.shopping_list,
         user: s.user.user
     }));
+    const addIngridient = (m) => {
+        console.log("m=", m)
+        let x = shopping?.find(s => s.Name === m.Name)
+        if (!x)
+            dispatch(addShopping({ userId: user.Id, name: m.Name, count: 1}))
+        else dispatch(editShoping(m.Name, 1, user.Id))
+    }
 
     return <>
         {user === null ? navigate('/home') : null}
@@ -48,7 +58,7 @@ const PresentationRecipe = () => {
                         {selectedRecipe.Ingrident.map((m, i) =>
                             <Segment key={i} >
                                 <SegmentInline >
-                                    <Button animated='vertical' icon onClick={() => dispatch(addShopping({ userId: user.Id, name: m.Name, count: m.Count }))}>
+                                    <Button animated='vertical' icon onClick={() => addIngridient(m)} >
                                         <ButtonContent hidden >הוסף</ButtonContent>
                                         <ButtonContent visible>
                                             <Icon name='shop' />
@@ -72,17 +82,36 @@ const PresentationRecipe = () => {
                 {user.Id === selectedRecipe.UserId ?
                     <CardContent>
                         <Button color='blue' icon size='large' floated="left" onClick={() => {
-                            dispatch({ type: 'DELETE_RECIPE', pyload: selectedRecipe.Id })
-                            navigate('/recipes')
+                            Swal.fire({
+                                title: "Are you sure?",
+                                text: "You won't be able to revert this!",
+                                icon: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#3085d6",
+                                cancelButtonColor: "#d33",
+                                confirmButtonText: "Yes, delete it!"
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    dispatch(deleteRecipe(selectedRecipe.Id))
+                                    Swal.fire({
+                                        title: "Deleted!",
+                                        text: "Your file has been deleted.",
+                                        icon: "success"
+                                    });
+                                }
+                            }).then(() => navigate('/getRecipes'))
                         }}>
                             <Icon name='trash alternate' />
                         </Button>
                         <Button color='blue' icon size='large' floated="left" onClick={() => navigate('/editRecipe')}>
                             <Icon name='edit' />
                         </Button>
-                        <Button onClick={() => window.print()} icon='print' color='blue'  size='large' floated="left">הדפס מתכון </Button>
+                        <Button onClick={() => window.print()} icon='print' color='blue' size='large' floated="left">הדפס מתכון </Button>
                     </CardContent>
-                    : <></>}
+                    : <>
+                        <CardContent>
+                            <Button onClick={() => window.print()} icon='print' color='blue' size='large' floated="left">הדפס מתכון </Button>
+                        </CardContent></>}
             </Card></Segment>
     </>
 }

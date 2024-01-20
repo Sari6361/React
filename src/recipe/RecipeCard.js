@@ -7,10 +7,9 @@ const RecipeCard = ({recipe}) => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { categoryList, difficultyList, user } = useSelector((s) => ({
+    const { categoryList, difficultyList } = useSelector((s) => ({
         categoryList: s.category.categories,
-        difficultyList: s.recipe.difficultyLevel,
-        user: s.user.user
+        difficultyList: s.recipe.difficultyLevel
     }));
 
     const handleClick = () => {
@@ -29,11 +28,11 @@ const RecipeCard = ({recipe}) => {
             <CardContent extra className='filters col'>
                 <div>
                     <Icon name='unordered list' />
-                    {" " + categoryList?.find(c => c.Id === recipe.CategoryId)?.Name + " "}
+                    {" " + categoryList?.find(c => c.Id === recipe?.CategoryId)?.Name + " "}
                 </div>
                 <div>
                     <Icon name='level up' />
-                    {" " + difficultyList?.find(d => d.Id === recipe.Difficulty)?.Name + " "}
+                    {" " + difficultyList?.find(d => d.Id === recipe?.Difficulty)?.Name + " "}
                 </div>
                 <div>
                     <Icon name='clock' />

@@ -12,7 +12,7 @@ import Header from '../header';
 
 const itemSchema = yup.object({
     Name: yup.string().required("לא הוכנס שם מוצר"),
-    Count: yup.number().positive("כמות חייבת להיות גדולה מאפס ").required(""),
+    Count: yup.string().matches(/^[\d]+[\./\\]?[\d]*$/).required(""),
     Type: yup.string().required(""),
 });
 
@@ -21,37 +21,37 @@ const ShoppingList = () => {
     const navigate = useNavigate();
     const [add, setAdd] = useState(false);
 
-    const { user, shopping } = useSelector(s => ({
+    const { user, shopping } = useSelector((s) => ({
         user: s.user.user,
         shopping: s.shopping.shopping_list,
-    }))
+    }));
     const { register, handleSubmit, formState: { errors }, control } = useForm({
         resolver: yupResolver(itemSchema)
     });
     useEffect(() => {
-        if (!shopping.length)
+        if (!shopping.length) {
             dispatch(getShopping(user.Id))
+        }
     }, [])
 
     const deleteProduct = (productId) => {
-        console.log("delete:", productId)
         dispatch(deletShoping(productId))
     }
     const increaseProduct = (product) => {
-        dispatch(editShoping({ name: product.Name, count: product.Count + 1, userId: user.Id }))
+        dispatch(editShoping(product.Name, 1, user.Id))
     }
     const decreaseProduct = (product) => {
         if (product.Count > 1)
-            dispatch(editShoping({ name: product.Name, count: product.Count - 1, userId: user.Id })).then(navigate('/shopingList'))
+            dispatch(editShoping(product.Name, -1, user.Id))
         else dispatch(deletShoping(product.Id))
     }
 
     const onSubmit = (data) => {
-        console.log("onsubmit data", data)
         dispatch(addShopping({ userId: user.Id, name: data.Name, count: data.Count }))
         setAdd(false)
     }
     return <>
+        {user === null ? navigate('/home') : null}
         <Header />
         <Segment className='container  '>
             <Table basic='very' textAlign="right" size='large' widths='equal' >
@@ -59,38 +59,20 @@ const ShoppingList = () => {
                     <TableHeaderCell>    כמות</TableHeaderCell>
                     <TableHeaderCell>    שם</TableHeaderCell>
                     <TableHeaderCell>                     </TableHeaderCell>
-                    {/* <TableHeaderCell>     </TableHeaderCell> */}
-                    {/* <TableHeaderCell>        </TableHeaderCell> */}
                 </TableHeader>
                 <TableBody>
-                    {console.log("shoppppp", shopping)}
-                    {
-                        shopping?.map((m, i) => (<>
-                            <TableRow key={i}>
-                                <TableCell>{m.Count + " "}</TableCell>
-                                <TableCell value={m.Name}>{m.Name}</TableCell>
-                                <TableCell >
-                                    <Button floated='left' onClick={() => {
-                                        deleteProduct(m.Id)
-                                        // Swal.fire({
-                                        //     title: "אתה בטוח?",
-                                        //     icon: "warning",
-                                        //     showCancelButton: true,
-                                        //     confirmButtonColor: "#3085d6",
-                                        //     cancelButtonColor: "#d33",
-                                        //     confirmButtonText: "כן, תמחק!",
-                                        //     cancelButtonText: 'לא'
-                                        // }).then((result) => {
-                                        //     if (result.isConfirmed); 
-                                        // })
-
-                                    }}><Icon name="trash alternate" />
-                                    </Button>
-                                    <Button floated='left' onClick={() => increaseProduct(m)}>+</Button>
-                                    <Button floated='left' onClick={() => decreaseProduct(m.Id)}>-</Button>
-                                </TableCell>
-                            </TableRow>
-                        </>))
+                    {shopping?.map((m, i) => (<>
+                        <TableRow key={i}>
+                            <TableCell>{m.Count + " "}</TableCell>
+                            <TableCell value={m.Name}>{m.Name}</TableCell>
+                            <TableCell >
+                                <Button floated='left' onClick={() => { deleteProduct(m.Id) }}><Icon name="trash alternate" />
+                                </Button>
+                                <Button floated='left' onClick={() => increaseProduct(m)}>+</Button>
+                                <Button floated='left' onClick={() => decreaseProduct(m)}>-</Button>
+                            </TableCell>
+                        </TableRow>
+                    </>))
                     }
                 </TableBody>
             </Table>
