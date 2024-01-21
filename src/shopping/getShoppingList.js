@@ -47,7 +47,7 @@ const ShoppingList = () => {
     }
 
     const onSubmit = (data) => {
-        dispatch(addShopping({ userId: user.Id, name: data.Name, count: data.Count }))
+        dispatch(addShopping({ userId: user.Id, name: data.Name, count:parseInt(data.Count) }))
         setAdd(false)
     }
     return <>
