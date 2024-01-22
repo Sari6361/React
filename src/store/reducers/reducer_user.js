@@ -1,7 +1,4 @@
-
-import { useDispatch } from 'react-redux';
 import * as actions from '../action';
-import axios from 'axios';
 const initialState = {
     user: null,
 }

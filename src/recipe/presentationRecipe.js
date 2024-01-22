@@ -19,7 +19,6 @@ const PresentationRecipe = () => {
         user: s.user.user
     }));
     const addIngridient = (m) => {
-        console.log("m=", m)
         let x = shopping?.find(s => s.Name === m.Name)
         if (!x)
             dispatch(addShopping({ userId: user.Id, name: m.Name, count: 1}))

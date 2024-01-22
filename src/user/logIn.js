@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from "react-router";
 import axios from "axios";
 import React from 'react';
-import Swal from 'sweetalert2';
 import { Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText } from '@mui/material';
 import { Link } from "react-router-dom";
 
@@ -26,7 +25,6 @@ const LogIn = () => {
     const [open, setOpen] = React.useState(true);
 
     const handleClose = () => {
-        //setOpen(false);
         navigate("/home");
     };
     const dispatch = useDispatch();

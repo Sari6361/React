@@ -31,30 +31,24 @@ const AllRecipes = ({ my }) => {
 
 
     useEffect(() => {
-        if (my) {
+        if (my)
             setMyRecipies(true);
-            console.log("my!!!", my)
-        }
-        else {
-            console.log("not MY", my);
+        else
             setMyRecipies(false);
 
-        }
+
         dispatch({ type: 'SET_SELECTED_RECIPE', pyload: null })
-        if (recipies.length === 0) {
+        if (recipies.length === 0)
             dispatch(getRecipes());
-        }
-        console.log("recipies", recipies)
+
         if (categoryList.length === 0)
             dispatch(getCategories());
-        console.log("difficulty", difficulty)
 
     }, [my, category, difficulty])
 
 
 
     function resetAllFilters() {
-        console.log("restart");
         setCategory(null);
         setDuration(null);
         setDifficulty(null);
@@ -80,12 +74,12 @@ const AllRecipes = ({ my }) => {
             </Segment> </> : <><Segment><h1>המתכונים שלי</h1></Segment></>}
         <div className="container">
             <CardGroup inverted>
-            {recipies?.map((r, i) =>
-                ((category == null || (category) === r.CategoryId) &&
-                    (duration == null || parseInt(duration) >= parseInt(r.Duration)) &&
-                    (difficulty == null || (difficulty) === r.Difficulty) &&
-                    (myRecipies == false || (myRecipies && user.Id === r.UserId))) ?
-                    <RecipeCard recipe={r} /> : null)}
+                {recipies?.map((r, i) =>
+                    ((category == null || (category) === r.CategoryId) &&
+                        (duration == null || parseInt(duration) >= parseInt(r.Duration)) &&
+                        (difficulty == null || (difficulty) === r.Difficulty) &&
+                        (myRecipies == false || (myRecipies && user.Id === r.UserId))) ?
+                        <RecipeCard recipe={r} /> : null)}
             </CardGroup>
         </div>
     </>)

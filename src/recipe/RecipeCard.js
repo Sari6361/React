@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Button, Card, CardContent, CardDescription, CardHeader, Icon, Image } from "semantic-ui-react";
@@ -16,7 +15,6 @@ const RecipeCard = ({recipe}) => {
         dispatch({ type: 'SET_SELECTED_RECIPE', pyload: recipe });
         navigate('/displayRecipe');
     }
-    // useEffect(() => { console.log("recipe card") },[])
 
     return <>
         <Card >

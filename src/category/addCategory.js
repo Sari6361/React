@@ -6,7 +6,6 @@ import { useDispatch } from 'react-redux';
 import { addCategory } from '../service/category'
 import { useNavigate } from 'react-router-dom';
 import React, { useEffect } from "react"
-import { Maximize } from '@mui/icons-material';
 const categorySchema = yup.object({
     Name: yup.string().required("לא הוכנס שם קטגוריה"),
 })

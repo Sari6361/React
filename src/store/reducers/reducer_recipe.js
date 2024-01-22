@@ -4,8 +4,6 @@ const initialState = {
     recipies: [],
     selectRecipe: null,
     difficultyLevel:[]
-    // [{ Id: 1, Name: 'קל' }, { Id: 2, Name: 'בינוני' }, { Id: 3, Name: 'קשה' }] 
-    //  [{id: 1, name: "הכל"  }, { id: 2, name: "קל מאד" }, { id: 3, name: "קל" }, { id: 4, name: "בינוני" }, { id: 5, name: "קשה" }, { id: 6, name: "קשה מאד" }],
 }
 
 const Reducer_recipe = (state = initialState, action) => {

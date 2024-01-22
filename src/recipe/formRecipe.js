@@ -51,14 +51,12 @@ const AddRecipe = (type) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const onSubmit = (data) => {
-        console.log("submit recipe", data,"type", type)
         if (type.type == 'add')
             dispatch(addRecipe(data, user.Id))
         else dispatch(editRecipe(data, selected_recipe.Id,user.Id))
         navigate('/getRecipes');
     }
     useEffect(() => {
-        console.log(type);
         if (!categories.length)
             dispatch(getCategories())
         selected_recipe?.Ingrident?.map((ing) => IngridentAppend(ing))
@@ -156,7 +154,7 @@ const AddRecipe = (type) => {
                 <p className="error">{errors.Instructions?.message}</p>
                 <Button onClick={() => InstructionAppend(null)}>הוסף הוראת הכנה</Button>
 
-                <Button type="submit" size="medium" floated="left" onClick={() => console.log("errors", errors)}>
+                <Button type="submit" size="medium" floated="left">
                     <Icon name="save outline" style={{ margin: 10 }} />שמור
                 </Button>
                 <p />

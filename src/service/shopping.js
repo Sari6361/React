@@ -20,10 +20,8 @@ export const deletShoping = (shopId) => {
         }
     });
     return dispatch => {
-        console.log("shopping:", shopId)
         axios.post(`http://localhost:8080/api/bay/delete/${shopId}`)
             .then(() => {
-                console.log("deleted!!")
                 dispatch({ type: 'DELETE_SHOPPING', pyload: shopId })
                 Toast.fire({
                     icon: "warning",
@@ -55,10 +53,8 @@ export const editShoping = (name, count, userId) => {
 
 export const addShopping = ({ userId, name, count }) => {
     return dispatch => {
-        console.log("SET name:", name, "userId:", userId, "count:", count)
         axios.post(`http://localhost:8080/api/bay`, { Name: name, UserId: userId, Count: count })
             .then((x) => {
-                console.log("SET name: add", x)
                 dispatch({ type: 'ADD_SHOPPING', pyload: x.data })
                 Swal.fire({
                     title: "המוצר נוסף בהצלחה!",
